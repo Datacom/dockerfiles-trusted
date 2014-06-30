@@ -6,6 +6,9 @@
 FROM ubuntu:14.04
 MAINTAINER Brad Murray <brad.murray@datacom.co.nz>
 
+ENV RUBY_VERSION 2.1.2
+ENV RUBY_INSTALLER_VERSION 0.4.3
+
 # Chris Lea's Nodejs, Rowan's Redis PPA, Stable Nginx
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C7917B12 &&\
     echo deb http://ppa.launchpad.net/chris-lea/node.js/ubuntu trusty main > /etc/apt/sources.list.d/nodejs.list  &&\
@@ -30,12 +33,12 @@ RUN apt-get install -y --no-install-recommends \
 
 # Ruby 2.1.2 stable via ruby-install, cleaned up the ruby src afterwards (src is 350mb)
 RUN echo 'gem: --no-document' >> /usr/local/etc/gemrc &&\
-    wget -O /tmp/ruby-install.tar.gz https://github.com/postmodern/ruby-install/archive/v0.4.3.tar.gz &&\
+    wget -O /tmp/ruby-install.tar.gz https://github.com/postmodern/ruby-install/archive/v$RUBY_INSTALLER_VERSION.tar.gz &&\
     tar -xzvf /tmp/ruby-install.tar.gz -C /opt && rm /tmp/ruby-install.tar.gz &&\
-    /opt/ruby-install-0.4.3/bin/ruby-install -i /usr/local/ ruby 2.1.2 -- --disable-install-rdoc &&\
+    /opt/ruby-install-$RUBY_INSTALLER_VERSION/bin/ruby-install -i /usr/local/ ruby $RUBY_VERSION -- --disable-install-rdoc &&\
     echo 'Cleaning up Ruby src' &&\
-    rm /usr/local/src/ruby-2.1.2.tar.bz2 &&\
-    rm -rf /usr/local/src/ruby-2.1.2 &&\
+    rm /usr/local/src/ruby-$RUBY_VERSION.tar.bz2 &&\
+    rm -rf /usr/local/src/ruby-$RUBY_VERSION &&\
     gem update --system &&\
     gem install bundler
 
