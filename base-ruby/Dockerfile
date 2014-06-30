@@ -16,7 +16,17 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C7917B12 &&\
 
 RUN apt-get update
 
-RUN apt-get install -y --no-install-recommends nano curl wget git-core ca-certificates build-essential nodejs nginx
+RUN apt-get install -y --no-install-recommends \
+    nano \
+    curl \
+    wget \
+    git-core \
+    ca-certificates \
+    build-essential \
+    nodejs \
+    nginx && \
+    apt-get clean && \
+    rm -Rf /var/cache/*
 
 # Ruby 2.1.2 stable via ruby-install, cleaned up the ruby src afterwards (src is 350mb)
 RUN echo 'gem: --no-document' >> /usr/local/etc/gemrc &&\
